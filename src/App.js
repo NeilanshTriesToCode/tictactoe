@@ -6,6 +6,9 @@ import { calculateWinner } from './helpers';
 import './styles/root.scss';
 
 const App = () => {
+    // const for new game
+    const NEW_GAME = [{ board: Array(9).fill(null), isXNext: true }];
+
     /* the useState() function returns an array of two elements: 
      1. the original argument passed to it
      2. a function used to update the initial state
@@ -16,16 +19,14 @@ const App = () => {
         2. next element (either a X or a O) 
     */
     // the state of an element/component can be changed using events (for eg. the onClick method in Square.js)
-    const [history, setHistory] = useState([
-        { board: Array(9).fill(null), isXNext: true },
-    ]); // initial state
+    const [history, setHistory] = useState(NEW_GAME); // initial state
 
     const [currentMove, setCurrentMove] = useState(0); // to keep track of steps/moves in the game
 
     const current = history[currentMove];
 
     // function used to determine the winner
-    const winner = calculateWinner(current.board); // returns winner (X or O) if there is one, else null
+    const { winner, winningSquares } = calculateWinner(current.board); // returns winner (X or O) if there is one, (else null) and array containing pattern of winning squares (else empty array)
 
     // function to handle when a square-grid is clicked on
     const handleSquareClick = position => {
@@ -68,6 +69,13 @@ const App = () => {
         setCurrentMove(move);
     };
 
+    // function to start a new game
+    const onNewGame = () => {
+        // resetting
+        setHistory(NEW_GAME);
+        setCurrentMove(0);
+    };
+
     return (
         <div className="app">
             <h1>TIC TAC TOE</h1>
@@ -75,7 +83,11 @@ const App = () => {
             <Board
                 board={current.board}
                 handleSquareClick={handleSquareClick}
+                winningSquares={winningSquares}
             />
+            <button type="button" onClick={onNewGame}>
+                Start new game
+            </button>
             <History
                 history={history}
                 moveTo={moveTo}

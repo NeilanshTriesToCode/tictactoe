@@ -18,8 +18,15 @@ export function calculateWinner(squares) {
             squares[a] === squares[b] &&
             squares[a] === squares[c]
         ) {
-            return squares[a]; // return the winner (X or O)
+            // return squares[a]; // return the winner (X or O)
+            return {
+                winner: squares[a],
+                winningSquares: [a, b, c],
+            };
         }
     }
-    return null;
+    return {
+        winner: null,
+        winningSquares: [],
+    };
 }
